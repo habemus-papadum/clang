@@ -1,3 +1,5 @@
+// XFAIL: lilinjn
+// XFAIL: *
 // Check frontend and linker invocations on the MTI MIPS toolchain.
 
 // -EB -mhard-float -mabi=32
