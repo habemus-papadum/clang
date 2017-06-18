@@ -926,8 +926,23 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
     T.setObjectFormat(llvm::Triple::COFF);
     DefaultTargetTriple = T.str();
   }
-  if (const Arg *A = Args.getLastArg(options::OPT_target))
+  if (const Arg *A = Args.getLastArg(options::OPT_target)) {
+    //Provides ability to cross compile conveniently by just providing target
+    llvm::Triple Proposed(A->getValue());
+    if (Proposed.getVendor()==llvm::Triple::Lilinjn &&
+            Proposed.getOS()==llvm::Triple::Linux &&
+            Proposed.getArch()==llvm::Triple::x86_64) {
+      llvm::Triple Current(DefaultTargetTriple);
+      if (Current.getOS()==llvm::Triple::Darwin && SysRoot==DEFAULT_SYSROOT) {
+        //patch up sysroot
+        const std::string needle="darwin";  //lilinjn specific nomenclature
+        size_t pos = SysRoot.rfind(needle);
+        if(pos != std::string::npos)
+          SysRoot.replace(pos, needle.length(), Proposed.getOSAndEnvironmentName());
+      }
+    }
     DefaultTargetTriple = A->getValue();
+  }
   if (const Arg *A = Args.getLastArg(options::OPT_ccc_install_dir))
     Dir = InstalledDir = A->getValue();
   for (const Arg *A : Args.filtered(options::OPT_B)) {
