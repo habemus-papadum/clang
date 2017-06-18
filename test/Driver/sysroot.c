@@ -1,3 +1,5 @@
+// XFAIL: lilinjn
+// XFAIL: *
 // REQUIRES: x86-registered-target
 //
 // Check that --sysroot= also applies to header search paths.

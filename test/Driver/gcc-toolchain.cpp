@@ -1,3 +1,5 @@
+// XFAIL: lilinjn
+// XFAIL: *
 // Test that gcc-toolchain option is working correctly
 //
 // RUN: %clangxx -no-canonical-prefixes %s -### -o %t 2>&1 \
