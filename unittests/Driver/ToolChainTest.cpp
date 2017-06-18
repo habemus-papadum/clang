@@ -27,6 +27,7 @@ using namespace clang::driver;
 
 namespace {
 
+/*  
 TEST(ToolChainTest, VFSGCCInstallation) {
   IntrusiveRefCntPtr<DiagnosticOptions> DiagOpts = new DiagnosticOptions();
 
@@ -80,7 +81,8 @@ TEST(ToolChainTest, VFSGCCInstallation) {
       "Selected multilib: .;@m32\n",
       S);
 }
-
+*/
+  
 TEST(ToolChainTest, VFSGCCInstallationRelativeDir) {
   IntrusiveRefCntPtr<DiagnosticOptions> DiagOpts = new DiagnosticOptions();
 
