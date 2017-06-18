@@ -535,6 +535,8 @@ std::string Linux::getDynamicLinker(const ArgList &Args) const {
   if (Distro == Distro::Exherbo && (Triple.getVendor() == llvm::Triple::UnknownVendor ||
                                     Triple.getVendor() == llvm::Triple::PC))
     return "/usr/" + Triple.str() + "/lib/" + Loader;
+  if (Triple.getVendor() == llvm::Triple::Lilinjn)
+    return computeSysRoot() + "/" + LibDir + "/" + Loader;
   return "/" + LibDir + "/" + Loader;
 }
 
@@ -734,7 +736,15 @@ std::string Linux::findLibCxxIncludePath() const {
       // one of the following two locations:
       DetectLibcxxIncludePath(getDriver().SysRoot + "/usr/local/include/c++"),
       DetectLibcxxIncludePath(getDriver().SysRoot + "/usr/include/c++") };
-  for (const auto &IncludePath : LibCXXIncludePathCandidates) {
+
+  const std::string LilinjnLibCXXIncludePathCandidates[] = {
+          //lilinjn prefers sysroot
+          DetectLibcxxIncludePath(getDriver().SysRoot + "/usr/local/include/c++"),
+          DetectLibcxxIncludePath(getDriver().SysRoot + "/usr/include/c++"),
+          DetectLibcxxIncludePath(getDriver().Dir + "/../include/c++")};
+
+  for (const auto &IncludePath : getTriple().getVendor() == llvm::Triple::Lilinjn ?
+                                 LilinjnLibCXXIncludePathCandidates : LibCXXIncludePathCandidates) {
     if (IncludePath.empty() || !getVFS().exists(IncludePath))
       continue;
     // Use the first candidate that exists.

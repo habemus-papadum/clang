@@ -466,9 +466,14 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   for (const auto &Opt : ToolChain.ExtraOpts)
     CmdArgs.push_back(Opt.c_str());
 
-  if (!Args.hasArg(options::OPT_static)) {
+  // lilinjn:
+  // this option works fine with lld and ld (at least v2.23) for -static,
+  // and is necessary for exception handling to work
+  // when using llvm's libunwind (as opposed to libgcc_eh which seems to be able
+  // to cope without this segment)
+  //if (!Args.hasArg(options::OPT_static)) {
     CmdArgs.push_back("--eh-frame-hdr");
-  }
+  //}
 
   if (const char *LDMOption = getLDMOption(ToolChain.getTriple(), Args)) {
     CmdArgs.push_back("-m");
