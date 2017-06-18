@@ -286,7 +286,10 @@ public:
 
   /// GetDefaultLinker - Get the default linker to use.
   virtual const char *getDefaultLinker() const {
-    return "ld";
+    if (getTriple().getVendor() == llvm::Triple::Lilinjn && getTriple().getOS() == llvm::Triple::Linux)
+      return "ld.lld";
+    else
+      return "ld";
   }
 
   /// GetDefaultRuntimeLibType - Get the default runtime library variant to use.
