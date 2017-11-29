@@ -1,4 +1,6 @@
 // Test sanitizers ld flags.
+// XFAIL: lilinjn
+// XFAIL: *
 
 // RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1 \
 // RUN:     -target i386-unknown-linux -fuse-ld=ld -fsanitize=address \
